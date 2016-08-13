@@ -4,9 +4,6 @@
   set_fact:
     gcloud: 'gcloud --format json --project {{ GOOGLE_CLOUD_PROJECT }}'
 
-- name: set the gcloud account
-  command: gcloud config set account {{ GOOGLE_CLOUD_ACCOUNT }}
-
 - name: check current cluster_node
   command: >
     {{ gcloud }}
@@ -29,6 +26,7 @@
     --enable-cloud-logging
     --enable-cloud-monitoring
     --scopes cloud-platform,projecthosting,storage-rw
+    --network {{ CLUSTER_NETWORK | default('default') }}
   register: cluster_create
   when: cluster_check | failed
 
